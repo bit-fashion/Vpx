@@ -18,11 +18,12 @@
 
 /* Creates on 2023/3/20. */
 
-#ifndef VPX_CORE_H
-#define VPX_CORE_H 1
+#ifndef _VPX_CORE_H
+#define _VPX_CORE_H 1
 
 #include <stdio.h>
 #include <stdint.h>
+#include "vpx_platform.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -54,10 +55,12 @@ extern "C" {
 #define VPX_MAKE_VERSION(major, minor, patch) \
     ( (((uint32_t)(major)) << 32) | (((uint32_t)(minor)) << 22) | (((uint32_t)(patch)) << 12) )
 
-typedef float         VpxFloat32;
-typedef uint32_t      VpxBool32;
-typedef uint32_t      VpxFlags;
-typedef uint64_t      VpxPointer;
+typedef uint32_t      VpxUint32;
+typedef uint64_t      VpxUint64;
+typedef float         VpxFloat;
+typedef VpxUint32     VpxFlags;
+typedef VpxUint64     VpxPointer;
+typedef VpxUint32     VpxBool32;
 #define VPX_TRUE      (0U)
 #define VPX_FALSE     (1U)
 
@@ -77,20 +80,82 @@ VPX_DEFINE_HANDLE(VpxCommandBuffer)
 #endif
 
 // <VPX DEFINE>: The following defines the enum.
+typedef enum VpxDefineSupportRenderAPI {
+    VPX_RENDER_API_OPENGL = 0,
+    VPX_RENDER_API_VULKAN = 1,
+} VpxDefineSupportRenderAPI;
+
 typedef enum VpxResult {
     VPX_SUCCESS = 0,
 } VpxResult;
 
-typedef enum VpxDefineRenderAPI {
-    VPX_RENDER_API_OPENGL = 0,
-    VPX_RENDER_API_VULKAN = 1,
-} VpxDefineRenderAPI;
+typedef enum VpxDeviceMemoryFlagBits {
+    VPX_DEVICE_MEMORY_USAGE_VERTEX_BUFFER_BIT = 0xA1008600,
+    VPX_DEVICE_MEMORY_USAGE_INDEX_BUFFER_BIT = 0xA1008601,
+    VPX_DEVICE_MEMORY_STORAGE_GPU_BIT = 0xA1008602,
+    VPX_DEVICE_MEMORY_STORAGE_CPU_BIT = 0xA1008603,
+    VPX_DEVICE_MEMORY_ACCESS_READ_ONLY_BIT = 0xA1008604,
+    VPX_DEVICE_MEMORY_ACCESS_WRITE_ONLY_BIT = 0xA1008605,
+    VPX_DEVICE_MEMORY_ACCESS_WRITE_READ_BIT = 0xA1008606,
+} VpxDeviceMemoryFlagBits;
+typedef VpxFlags VpxDeviceMemoryUsageFlags;
+typedef VpxFlags VpxDeviceMemoryStorageFlags;
+typedef VpxFlags VpxDeviceMemoryAccessFlags;
 
-//== <VPX DEFINE>: The following defines the functions. ==//
-VPXAPI_ATTR
+typedef struct VpxDeviceMemoryAllocateInfo {
+    VpxUint64                                   size;
+    VpxDeviceMemoryStorageFlags                 storage;
+    VpxDeviceMemoryUsageFlags                   usage;
+} VpxDeviceMemoryAllocateInfo;
+
+typedef struct VpxDeviceMemoryMapInfo {
+    VpxUint64                                   offset;
+    VpxUint64                                   size;
+    VpxDeviceMemoryAccessFlags                  access;
+    void**                                      ppData;
+} VpxDeviceMemoryMapInfo;
+
+typedef struct VpxDeviceMemoryReadWriteInfo {
+    VpxUint64                                   offset;
+    VpxUint64                                   size;
+    void**                                      ppData;
+} VpxDeviceMemoryReadInfo, VpxDeviceMemoryWriteInfo;
+
+//== <VPX DEFINE>: VpxDeviceMemory. ==//
+VPXAPI_ATTR VpxResult VPXAPI_CALL VpxAllocateDeviceMemory(
+    const VpxDeviceMemoryAllocateInfo*          pAllocateInfo,
+    VpxDeviceMemory*                            pMemory
+);
+
+VPXAPI_ATTR VpxResult VPXAPI_CALL VpxBindDeviceMemory(
+    VpxDeviceMemory                             memory
+);
+
+VPXAPI_ATTR VpxResult VPXAPI_CALL VpxMapDeviceMemory(
+    const VpxDeviceMemoryMapInfo*               pMapInfo,
+    VpxDeviceMemory                             memory
+);
+
+VPXAPI_ATTR VpxResult VPXAPI_CALL VpxUnmapDeviceMemory(
+    VpxDeviceMemory                             memory
+);
+
+VPXAPI_ATTR VpxResult VPXAPI_CALL VpxReadDeviceMemory(
+    const VpxDeviceMemoryReadInfo*              pReadInfo,
+    VpxDeviceMemory                             memory
+);
+
+VPXAPI_ATTR VpxResult VPXAPI_CALL VpxWriteDeviceMemory(
+    const VpxDeviceMemoryWriteInfo*             pWriteInfo,
+    VpxDeviceMemory                             memory
+);
+
+VPXAPI_ATTR VpxResult VPXAPI_CALL VpxFreeDeviceMemory(
+    VpxDeviceMemory                             memory
+);
 
 #ifdef __cplusplus
 };
 #endif
 
-#endif /* VPX_CORE_H */
+#endif /* _VPX_CORE_H */

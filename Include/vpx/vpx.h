@@ -17,9 +17,10 @@
  * ************************************************************************/
 
 /* Creates on 2023/3/24. */
-#ifndef SP2R_SP2R_H
-#define SP2R_SP2R_H
+#ifndef _VPX_H
+#define _VPX_H
 
+// include vpx core head file.
 #include "vpx_core.h"
 
-#endif /* SP2R_SP2R_H */
+#endif /* _VPX_H */

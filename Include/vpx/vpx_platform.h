@@ -16,12 +16,8 @@
  *
  * ************************************************************************/
 
-/* Creates on 2023/3/24. */
-#ifndef SP2R_SP2R_BACKEND_IMPL_OPENGL_H
-#define SP2R_SP2R_BACKEND_IMPL_OPENGL_H
+/* Creates on 2023/3/25. */
+#ifndef _VPX_PLATFORM_H
+#define _VPX_PLATFORM_H
 
-#include "vpx/vpx.h"
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
-#endif /* SP2R_SP2R_BACKEND_IMPL_OPENGL_H */
+#endif /* _VPX_PLATFORM_H */
