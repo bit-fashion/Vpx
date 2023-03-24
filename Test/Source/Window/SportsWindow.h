@@ -21,7 +21,7 @@
 
 #include <string>
 #include <stdexcept>
-#include <AirGraph/AirGraph.h>
+#include "Include/AirGraph/vpx.h"
 #include <GLFW//glfw3.h>
 #include <imgui.h>
 

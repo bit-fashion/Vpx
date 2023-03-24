@@ -20,7 +20,7 @@
 #ifndef SP2R_SP2R_BACKEND_IMPL_OPENGL_H
 #define SP2R_SP2R_BACKEND_IMPL_OPENGL_H
 
-#include "AirGL/AirGraph.h"
+#include "AirGraph/vpx.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -59,6 +59,11 @@ struct AirDeviceMemory_T {
     uint64_t                size;
     int                     usage;
     unsigned int            bufid;
+};
+
+struct AirVertexBuffer_T {
+    unsigned int            vao;
+    AirDeviceMemory         buf;
 };
 
 #endif /* SP2R_SP2R_BACKEND_IMPL_OPENGL_H */

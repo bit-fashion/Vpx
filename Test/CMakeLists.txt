@@ -3,7 +3,7 @@
 #
 CMAKE_MINIMUM_REQUIRED (VERSION 3.8)
 
-PROJECT ("Sp2rTest")
+PROJECT ("vpx-test")
 
 # SET(CMAKE_EXE_LINKER_FLAGS "-static")
 

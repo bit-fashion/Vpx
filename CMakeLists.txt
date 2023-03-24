@@ -1,5 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.26)
-PROJECT(graph0 C)
+PROJECT(vpx0 C)
 
 SET(CMAKE_C_STANDARD 23)
 
@@ -12,14 +12,14 @@ INCLUDE_DIRECTORIES(${PROJECT_NAME} SYSTEM Dependencies/Include)
 #
 # 第三方动态库目录
 #
-LINK_DIRECTORIES(${PROJECT_NAME} lib/GLFW)
+LINK_DIRECTORIES(${PROJECT_NAME} Library/GLFW)
 
 #
 # 添加动态库cpp代码文件
 #
 ADD_LIBRARY(${PROJECT_NAME} SHARED
         Dependencies/glad/glad.c
-        Source/OpenGL/AirGraph_Backend_Impl_OpenGL.c
+        Source/OpenGL/Vpx_Backend_Impl_OpenGL.c
 )
 
 INSTALL(TARGETS ${PROJECT_NAME})

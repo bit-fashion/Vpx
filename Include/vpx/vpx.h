@@ -20,6 +20,6 @@
 #ifndef SP2R_SP2R_H
 #define SP2R_SP2R_H
 
-#include "AirGraphCore.h"
+#include "vpx_core.h"
 
 #endif /* SP2R_SP2R_H */

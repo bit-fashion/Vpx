@@ -15,22 +15,46 @@ int main()
     deviceMemoryAllocateInfo.spaceFlag = AIR_DEVICE_MEMORY_SPACE_IN_GPU_BIT;
 
     AirDeviceMemory memory;
-    AirAllocateMemory(&deviceMemoryAllocateInfo, &memory);
-    AirBindMemory(memory);
+    AirAllocateDeviceMemory(&deviceMemoryAllocateInfo, &memory);
+    AirBindDeviceMemory(memory);
 
     glm::vec3 color{ 0.1f, 0.5f, 0.8f };
-    AirWriteMemory(0, sizeof(glm::vec3), &color, memory);
+    AirWriteDeviceMemory(0, sizeof(glm::vec3), &color, memory);
+
+    float vertices[3 * 3] = {
+            -0.5, 0.5f, 0.0f,
+            0.5, 0.5f, 0.0f,
+            0.5, -0.5f, 0.0f,
+    };
+
+    AirVertexBuffer vtxbuffer;
+    AirVertexBufferMemoryAllocateInfo vertexBufferMemoryAllocateInfo;
+    vertexBufferMemoryAllocateInfo.size = sizeof(vertices);
+    vertexBufferMemoryAllocateInfo.stride = sizeof(vertices);
+    vertexBufferMemoryAllocateInfo.verticesCount = sizeof(vertices) / sizeof(float);
+    vertexBufferMemoryAllocateInfo.pVertices = vertices;
+    vertexBufferMemoryAllocateInfo.spaceFlag = AIR_DEVICE_MEMORY_SPACE_IN_GPU_BIT;
+
+    AirVertexBufferMemoryLayout layouts[] = {
+            { 0, 0, 3 },
+    };
+
+    AirAllocateVertexBufferMemory(&vertexBufferMemoryAllocateInfo, layouts, (sizeof(layouts) / sizeof(AirVertexBufferMemoryLayout)),
+                                  &vtxbuffer);
 
     char *mmap;
-    AirMapMemory(0, AIR_DEVICE_MEMORY_ACCESS_WRITE_ONLY_BIT, memory, (void **) &mmap);
+    AirMapDeviceMemory(0, AIR_DEVICE_MEMORY_ACCESS_WRITE_ONLY_BIT, memory, (void **) &mmap);
 
-    while (!sportswin->ShouldClose()) {
+   while (!sportswin->ShouldClose()) {
         // Begin
         AirCmdClearColorBuffer(0.5f, 0.2f, 0.4f, 1.0f);
 
-        // Air
+        // Vpx
         sportswin->BeginImGuiRender();
         {
+            AirCmdBindVertexBuffers(NULL, &vtxbuffer, 1);
+            AirCmdDrawArray(NULL, 0, 3);
+
             ImGui::Begin("Memory");
             ImGui::DragFloat3("color", (float *) mmap, 0.01f, 0.01f, 1.0f);
             ImGui::End();
@@ -39,7 +63,7 @@ int main()
 
     }
 
-    AirUnmapMemory(memory);
+    AirUnmapDeviceMemory(memory);
     // AirFreeMemory(memory);
 
     return 0;
