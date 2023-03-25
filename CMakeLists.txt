@@ -7,19 +7,24 @@ SET(CMAKE_C_STANDARD 23)
 # 头文件目录
 #
 INCLUDE_DIRECTORIES(${PROJECT_NAME} ./ ./Include)
-INCLUDE_DIRECTORIES(${PROJECT_NAME} SYSTEM Dependencies/Include)
+INCLUDE_DIRECTORIES(${PROJECT_NAME} SYSTEM ThirdParty/Include)
+
+#
+# Vulkan SDK
+#
+
 
 #
 # 第三方动态库目录
 #
-LINK_DIRECTORIES(${PROJECT_NAME} Library/GLFW)
+LINK_DIRECTORIES(${PROJECT_NAME} Library/GLFW Library/vulkan)
 
 #
 # 添加动态库cpp代码文件
 #
 ADD_LIBRARY(${PROJECT_NAME} SHARED
-        Dependencies/glad/glad.c
-        Source/OpenGL/Vpx_Backend_Impl_OpenGL.c
+        ThirdParty/glad/glad.c
+        Source/Vulkan/Vpx_Backend_Impl_Vulkan.c
 )
 
 INSTALL(TARGETS ${PROJECT_NAME})
@@ -30,4 +35,4 @@ SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE C
         OUTPUT_NAME "${PROJECT_NAME}"
         PREFIX "")
 # link
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} -lglfw3)
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} -lglfw3 -lvulkan-1)
